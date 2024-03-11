@@ -5,14 +5,14 @@ struct StringHash {
   vector<T> val;
   vector<T> pw;
 
-  StringHash(T base) : base(base), mod(find_prime()) {}
+  StringHash(T base) : base(base), mod(find_prime()) { pw.assign(1, T(1)); }
   StringHash(string& s, T base) : StringHash(base) {
-    pw.assign(1, T(1));
     calc_pw(s.size());
     hashing(s);
   }
 
   T& operator[](int i) { return val[i]; }
+  bool operator==(auto& b) { return val.back() == b.val.back(); }
 
   T find_prime() {
     auto is_prime = [](T num) {
