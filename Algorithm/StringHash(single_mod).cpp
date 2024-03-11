@@ -41,6 +41,7 @@ struct StringHash {
   }
 
   vector<T>& hashing(string& s) {
+    calc_pw(s.size());
     val.resize(s.size() + 1, T());
     for (int i = 0; i < s.size(); i++) {
       val[i + 1] = (val[i] * base + s[i]) % mod;
