@@ -1,4 +1,4 @@
-# ConciseAlgoTemplate
+# ConciseAlgoTemplates
 A collection of concise algo templates for programing contest. (Not for projects)
 
 I dedicated to creating a set of algorithmic templates that are easy to read and use. So, you won't see too much projectized code as you read.
