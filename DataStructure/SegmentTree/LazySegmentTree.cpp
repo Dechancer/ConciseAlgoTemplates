@@ -5,6 +5,7 @@ struct LazySegmentTree {
   Tag v;
   vector<Info> seg;
   vector<Tag> tag;
+
   LazySegmentTree(int n) : n(n) {
     seg.resize(n * 4);
     tag.resize(n * 4);

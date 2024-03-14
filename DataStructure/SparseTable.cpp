@@ -1,6 +1,7 @@
 template <class Info>
 struct SparseTable {
   vector<vector<Info>> seg;
+
   SparseTable(const vector<Info>& a) {
     int n = a.size();
     int lg = __lg(n);

@@ -2,29 +2,25 @@ template <class T>
 struct Matrix {
   int r, c;
   const T mod;
-  const T init;
-  vector<vector<T>> a;
+  vector<vector<T>> mat;
 
-  Matrix(int r, int c, T mod, T init) : r(r), c(c), mod(mod), init(init) {
-    a = vector(r, vector(c, init));
+  Matrix(int r, int c, T mod) : r(r), c(c), mod(mod) {
+    mat = vector(r, vector(c, T()));
   }
 
-  Matrix(int r, int c, T mod, vector<vector<T>> init)
-      : r(r), c(c), mod(mod), init(T()), a(init) {}
-
-  vector<T>& operator[](int i) { return a[i]; }
+  vector<T>& operator[](int i) { return mat[i]; }
 
   void operator=(const Matrix& b) {
     r = b.r, c = b.c;
-    a = b.a;
+    mat = b.mat;
   }
 
-  Matrix operator*(Matrix b) {
-    Matrix res(r, b.c, mod, init);
+  Matrix operator*(const Matrix& b) {
+    Matrix res(r, b.c, mod);
     for (int i = 0; i < r; i++) {
       for (int j = 0; j < b.c; j++) {
         for (int k = 0; k < c; k++) {
-          res[i][j] = (res[i][j] + 1ll * a[i][k] * b[k][j]) % mod;
+          res[i][j] = (res[i][j] + 1ll * mat[i][k] * b.mat[k][j]) % mod;
         }
       }
     }
@@ -33,7 +29,7 @@ struct Matrix {
 
   template <class EXP>
   Matrix operator^(EXP exp) {
-    Matrix res(r, c, mod, init);
+    Matrix res(r, c, mod);
     Matrix base = *this;
     for (int i = 0; i < r; i++) {
       res[i][i] = 1;

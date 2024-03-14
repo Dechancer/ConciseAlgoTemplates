@@ -4,6 +4,7 @@ struct SegmentTree {
   int ql, qr;
   Info v;
   vector<Info> seg;
+
   SegmentTree(int n) : n(n) { seg.resize(n * 4); }
   SegmentTree(const vector<Info>& a) : SegmentTree(a.size()) {
     function<void(int, int, int)> build = [&](int l, int r, int p) {

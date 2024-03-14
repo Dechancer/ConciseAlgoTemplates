@@ -1,23 +1,22 @@
 template <class T>
 struct Comb {
-  const int n;
+  int n;
   const T mod;
-  vector<T> fac, finv;
+  vector<T> fac, inv_fac;
   Comb(int n, T mod) : n(n), mod(mod) {
-    fac.resize(n + 1);
-    finv.resize(n + 1);
-    fac[0] = 1;
+    fac.resize(n + 1, 1);
+    inv_fac.resize(n + 1);
     for (int i = 1; i <= n; i++) {
       fac[i] = fac[i - 1] * i % mod;
     }
 
-    finv[n] = qpow(fac[n], mod - 2);
+    inv_fac[n] = pow(fac[n], mod - 2);
     for (int i = n; i; i--) {
-      finv[i - 1] = finv[i] * i % mod;
+      inv_fac[i - 1] = inv_fac[i] * i % mod;
     }
   }
 
-  T qpow(T base, T exp) {
+  T pow(T base, T exp) {
     T res = 1;
     while (exp) {
       if (exp & 1) {
@@ -29,20 +28,9 @@ struct Comb {
     return res;
   }
 
-  T inv(T base) { return qpow(base, mod - 2); }
+  T A(int n, int m) { return fac[n] * inv_fac[n - m] % mod; }
 
-  T A(int n, int m) { return fac[n] * finv[n - m] % mod; }
+  T C(int n, int m) { return fac[n] * inv_fac[n - m] % mod * inv_fac[m] % mod; }
 
-  T C(int n, int m) { return fac[n] * finv[n - m] % mod * finv[m] % mod; }
-
-  T S(int n, int m) {
-    T res = 0;
-    int sign = -1;
-    for (int k = 0; k <= m; k++) {
-      sign *= -1;
-      T term = sign * C(m, k) * qpow(m - k, n) % mod;
-      res = (res + term + mod) % mod;
-    }
-    return res * finv[m] % mod;
-  }
+  T C(int n) { return C(2 * n, n) - C(2 * n, n + 1); }
 };

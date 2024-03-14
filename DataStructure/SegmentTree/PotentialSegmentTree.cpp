@@ -4,6 +4,7 @@ struct PotentialSegmentTree {
   int ql, qr;
   Info v;
   vector<Info> seg;
+
   PotentialSegmentTree(int n) : n(n) { seg.resize(n * 4); }
   PotentialSegmentTree(const vector<Info>& a) : PotentialSegmentTree(a.size()) {
     function<void(int, int, int)> build = [&](int l, int r, int p) {

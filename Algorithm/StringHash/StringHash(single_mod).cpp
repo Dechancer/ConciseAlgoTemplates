@@ -2,17 +2,17 @@ template <class T>
 struct StringHash {
   T base;
   const T mod;
-  vector<T> val;
+  vector<T> hash;
   vector<T> pw;
 
   StringHash(T base) : base(base), mod(find_prime()) { pw.assign(1, T(1)); }
   StringHash(string& s, T base) : StringHash(base) {
-    calc_pw(s.size());
+    init_pw(s.size());
     hashing(s);
   }
 
-  T& operator[](int i) { return val[i]; }
-  bool operator==(auto& b) { return val.back() == b.val.back(); }
+  T& operator[](int i) { return hash[i]; }
+  bool operator==(auto& b) { return hash.back() == b.hash.back(); }
 
   T find_prime() {
     auto is_prime = [](T num) {
@@ -32,22 +32,23 @@ struct StringHash {
     return prime;
   }
 
-  void calc_pw(int n) {
-    if (n + 1 > pw.size()) {
-      for (int i = pw.size() - 1; i < n; i++) {
-        pw.push_back(pw[i] * base % mod);
-      }
+  void init_pw(int n) {
+    if (n + 1 <= pw.size()) {
+      return;
+    }
+    for (int i = pw.size() - 1; i < n; i++) {
+      pw.push_back(pw[i] * base % mod);
     }
   }
 
   vector<T>& hashing(string& s) {
-    calc_pw(s.size());
-    val.resize(s.size() + 1, T());
+    init_pw(s.size());
+    hash.resize(s.size() + 1, T());
     for (int i = 0; i < s.size(); i++) {
-      val[i + 1] = (val[i] * base + s[i]) % mod;
+      hash[i + 1] = (hash[i] * base + s[i]) % mod;
     }
-    return val;
+    return hash;
   }
 
-  T get(int l, int r) { return (val[r] + (mod - val[l]) * pw[r - l]) % mod; }
+  T get(int l, int r) { return (hash[r] + (mod - hash[l]) * pw[r - l]) % mod; }
 };
