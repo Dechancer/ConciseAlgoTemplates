@@ -6,11 +6,13 @@ struct LazySegmentTree {
   vector<Info> seg;
   vector<Tag> tag;
 
-  LazySegmentTree(int n) : n(n) {
-    seg.resize(n * 4);
-    tag.resize(n * 4);
-  }
-  LazySegmentTree(const vector<Info>& a) : LazySegmentTree(a.size()) {
+  LazySegmentTree(int n, Info v = Info{}) { init(vector(n, v)); }
+  LazySegmentTree(const vector<Info>& a) { init(a); }
+
+  void init(const vector<Info>& a) {
+    n = a.size();
+    seg.assign(n * 4, Info{});
+    tag.assign(n * 4, Tag{});
     function<void(int, int, int)> build = [&](int l, int r, int p) {
       if (l + 1 == r)
         return void(seg[p] = a[l]);
@@ -27,7 +29,7 @@ struct LazySegmentTree {
   void push(int p) {
     apply(p * 2, tag[p]);
     apply(p * 2 + 1, tag[p]);
-    tag[p] = Tag();
+    tag[p] = Tag{};
   }
   void apply(int p, Tag& v) {
     seg[p].apply(v);
@@ -60,7 +62,7 @@ struct LazySegmentTree {
   }
   Info query(int l, int r, int p) {
     if (qr <= l or r <= ql)
-      return Info();
+      return Info{};
     if (ql <= l and r <= qr)
       return seg[p];
 

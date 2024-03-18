@@ -5,8 +5,12 @@ struct SegmentTree {
   Info v;
   vector<Info> seg;
 
-  SegmentTree(int n) : n(n) { seg.resize(n * 4); }
-  SegmentTree(const vector<Info>& a) : SegmentTree(a.size()) {
+  SegmentTree(int n, Info v = Info{}) { init(vector(n, v)); }
+  SegmentTree(const vector<Info>& a) { init(a); }
+
+  void init(const vector<Info>& a) {
+    n = a.size();
+    seg.assign(n * 4, Info{});
     function<void(int, int, int)> build = [&](int l, int r, int p) {
       if (l + 1 == r)
         return void(seg[p] = a[l]);
@@ -46,7 +50,7 @@ struct SegmentTree {
   }
   Info query(int l, int r, int p) {
     if (qr <= l or r <= ql)
-      return Info();
+      return Info{};
     if (ql <= l and r <= qr)
       return seg[p];
 

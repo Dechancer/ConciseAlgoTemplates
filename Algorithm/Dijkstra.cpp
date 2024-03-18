@@ -1,18 +1,21 @@
+template <class T>
 struct Dijkstra {
-  using pii = pair<int, int>;
-  vector<int> dis;
-  vector<vector<pii>> adj;
+  using pti = pair<T, int>;
+  vector<T> dis;
+  vector<vector<pti>> adj;
 
-  Dijkstra(int n) {
-    dis.resize(n, -1);
-    adj.resize(n);
+  Dijkstra(int n) { init(n); }
+
+  void init(int n) {
+    dis.assign(n, T{-1});
+    adj.assign(n, vector(0, pti{}));
   }
 
-  void add_edge(int u, int v, int w) { adj[u].push_back({v, w}); }
+  void add_edge(int u, int v, T w) { adj[u].push_back({w, v}); }
 
   void run(int s) {
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
-    pq.push({0, s});
+    priority_queue<pti, vector<pti>, greater<pti>> pq;
+    pq.push({T{}, s});
     while (pq.size()) {
       auto [d, u] = pq.top();
       pq.pop();
@@ -22,7 +25,7 @@ struct Dijkstra {
       }
       dis[u] = d;
 
-      for (auto& [v, w] : adj[u]) {
+      for (auto& [w, v] : adj[u]) {
         pq.push({d + w, v});
       }
     }

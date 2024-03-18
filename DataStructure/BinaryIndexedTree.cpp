@@ -3,7 +3,12 @@ struct BIT {
   int n;
   vector<T> pre;
 
-  BIT(int n) : n(n) { pre.resize(n); }
+  BIT(int n) { init(n); }
+
+  void init(int n) {
+    this->n = n;
+    pre.assign(n, T{});
+  }
 
   int lowbit(int i) { return i & -i; }
 
@@ -24,7 +29,7 @@ struct BIT {
 
   int select(const T& k) {
     int x = 0;
-    T cur();
+    T cur{};
     for (int i = 1 << __lg(n); i; i /= 2) {
       if (x + i <= n && cur + pre[x + i - 1] <= k) {
         x += i;

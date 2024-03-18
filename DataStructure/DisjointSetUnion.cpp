@@ -1,7 +1,9 @@
 struct DSU {
   vector<int> f, sz;
 
-  DSU(int n) {
+  DSU(int n) { init(n); }
+
+  void init(int n) {
     f.resize(n);
     iota(f.begin(), f.end(), 0);
     sz.assign(n, 1);
