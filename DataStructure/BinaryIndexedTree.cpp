@@ -1,27 +1,27 @@
 template <class T>
 struct BIT {
   int n;
-  vector<T> pre;
+  vector<T> bit;
 
   BIT(int n) { init(n); }
 
   void init(int n) {
     this->n = n;
-    pre.assign(n, T{});
+    bit.assign(n + 1, 0);
   }
 
   int lowbit(int i) { return i & -i; }
 
-  void update(int x, const T& v) {
+  void modify(int x, const T& v) {
     for (int i = x + 1; i <= n; i += lowbit(i)) {
-      pre[i - 1] = pre[i - 1] + v;
+      bit[i] = bit[i] + v;
     }
   }
 
   T query(int x) {
     T res = 0;
     for (int i = x; i; i -= lowbit(i)) {
-      res = res + pre[i - 1];
+      res = res + bit[i];
     }
     return res;
   }
@@ -29,11 +29,11 @@ struct BIT {
 
   int select(const T& k) {
     int x = 0;
-    T cur{};
-    for (int i = 1 << __lg(n); i; i /= 2) {
-      if (x + i <= n && cur + pre[x + i - 1] <= k) {
+    T cur;
+    for (int i = 1 << __lg(n); i; i >>= 1) {
+      if (x + i <= n && cur + bit[x + i] <= k) {
         x += i;
-        cur = cur + pre[x - 1];
+        cur = cur + bit[x];
       }
     }
     return x;

@@ -5,7 +5,7 @@ struct Matrix {
   vector<vector<T>> mat;
 
   Matrix(int r, int c, T mod) : r(r), c(c), mod(mod) {
-    mat = vector(r, vector(c, T()));
+    mat = vector(r, vector(c, 0));
   }
   Matrix(const vector<vector<T>>& a, T mod)
       : mat(a), r(a.size()), c(a[0].size()), mod(mod) {}

@@ -5,12 +5,12 @@ struct PotentialSegmentTree {
   Info v;
   vector<Info> seg;
 
-  PotentialSegmentTree(int n, Info v = Info{}) { init(vector(n, v)); }
+  PotentialSegmentTree(int n, Info v = Info()) { init(vector(n, v)); }
   PotentialSegmentTree(const vector<Info>& a) { init(a); }
 
   void init(const vector<Info>& a) {
     n = a.size();
-    seg.assign(n * 4, Info{});
+    seg.assign(n * 4, Info());
     function<void(int, int, int)> build = [&](int l, int r, int p) {
       if (l + 1 == r)
         return void(seg[p] = a[l]);
@@ -25,13 +25,13 @@ struct PotentialSegmentTree {
 
   void pull(int p) { seg[p] = seg[p * 2] + seg[p * 2 + 1]; }
 
-  void update(int ql, int qr, const Info& v) {
+  void modify(int ql, int qr, const Info& v) {
     this->ql = ql;
     this->qr = qr;
     this->v = v;
-    update(0, n, 1);
+    modify(0, n, 1);
   }
-  void update(int l, int r, int p) {
+  void modify(int l, int r, int p) {
     if (seg[p].check(v))
       return;
     if (qr <= l or r <= ql)
@@ -40,8 +40,8 @@ struct PotentialSegmentTree {
       return seg[p].apply(v);
 
     int mid = (l + r) / 2;
-    update(l, mid, p * 2);
-    update(mid, r, p * 2 + 1);
+    modify(l, mid, p * 2);
+    modify(mid, r, p * 2 + 1);
     pull(p);
   }
 
@@ -52,7 +52,7 @@ struct PotentialSegmentTree {
   }
   Info query(int l, int r, int p) {
     if (qr <= l or r <= ql)
-      return Info{};
+      return Info();
     if (ql <= l and r <= qr)
       return seg[p];
 

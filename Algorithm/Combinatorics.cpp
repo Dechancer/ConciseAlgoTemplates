@@ -32,5 +32,28 @@ struct Comb {
 
   T C(int n, int m) { return fac[n] * inv_fac[n - m] % mod * inv_fac[m] % mod; }
 
-  T C(int n) { return C(2 * n, n) - C(2 * n, n + 1); }
+  T C(int n) { return C(n * 2, n) - C(n * 2, n + 1); }
+
+  T s(int n, int m) {
+    vector res(m + 1, 0);
+    res[0] = 1;
+    for (int i = 1; i <= n; i++) {
+      for (int j = min(i, m); j > 0; j--) {
+        res[j] = (res[j - 1] + (i - 1) * res[j]) % mod;
+      }
+      res[0] = 0;
+    }
+    return res[m];
+  }
+
+  T S(int n, int m) {
+    T res = 0;
+    int sign = -1;
+    for (int i = 0; i <= m; i++) {
+      sign *= -1;
+      T term = sign * C(m, i) * pow(m - i, n) % mod;
+      res = (res + term + mod) % mod;
+    }
+    return res * inv_fac[m] % mod;
+  }
 };

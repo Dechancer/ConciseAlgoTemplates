@@ -5,10 +5,22 @@ struct StringHash {
   vector<T> hash;
   vector<T> pw;
 
-  StringHash(T base) : base(base), mod(find_prime()) { pw.assign(1, T(1)); }
-  StringHash(string& s, T base) : StringHash(base) {
-    init_pw(s.size());
-    hashing(s);
+  StringHash(T base) : base(base), mod(find_prime()) { pw.assign(1, 1); }
+  StringHash(const string& s, T base) : StringHash(base) { init(s); }
+
+  auto& init(const string& s) {
+    int n = s.size();
+    if (n + 1 > pw.size()) {
+      for (int i = pw.size() - 1; i < n; i++) {
+        pw.push_back(pw[i] * base % mod);
+      }
+    }
+
+    hash.resize(n + 1);
+    for (int i = 0; i < n; i++) {
+      hash[i + 1] = (hash[i] * base + s[i]) % mod;
+    }
+    return hash;
   }
 
   T& operator[](int i) { return hash[i]; }
@@ -30,24 +42,6 @@ struct StringHash {
       prime++;
     }
     return prime;
-  }
-
-  void init_pw(int n) {
-    if (n + 1 <= pw.size()) {
-      return;
-    }
-    for (int i = pw.size() - 1; i < n; i++) {
-      pw.push_back(pw[i] * base % mod);
-    }
-  }
-
-  vector<T>& hashing(string& s) {
-    init_pw(s.size());
-    hash.resize(s.size() + 1, T());
-    for (int i = 0; i < s.size(); i++) {
-      hash[i + 1] = (hash[i] * base + s[i]) % mod;
-    }
-    return hash;
   }
 
   T get(int l, int r) { return (hash[r] + (mod - hash[l]) * pw[r - l]) % mod; }

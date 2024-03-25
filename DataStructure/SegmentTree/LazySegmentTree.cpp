@@ -6,13 +6,13 @@ struct LazySegmentTree {
   vector<Info> seg;
   vector<Tag> tag;
 
-  LazySegmentTree(int n, Info v = Info{}) { init(vector(n, v)); }
+  LazySegmentTree(int n, Info v = Info()) { init(vector(n, v)); }
   LazySegmentTree(const vector<Info>& a) { init(a); }
 
   void init(const vector<Info>& a) {
     n = a.size();
-    seg.assign(n * 4, Info{});
-    tag.assign(n * 4, Tag{});
+    seg.assign(n * 4, Info());
+    tag.assign(n * 4, Tag());
     function<void(int, int, int)> build = [&](int l, int r, int p) {
       if (l + 1 == r)
         return void(seg[p] = a[l]);
@@ -29,20 +29,20 @@ struct LazySegmentTree {
   void push(int p) {
     apply(p * 2, tag[p]);
     apply(p * 2 + 1, tag[p]);
-    tag[p] = Tag{};
+    tag[p] = Tag();
   }
   void apply(int p, Tag& v) {
     seg[p].apply(v);
     tag[p].apply(v);
   }
 
-  void update(int ql, int qr, const Tag& v) {
+  void modify(int ql, int qr, const Tag& v) {
     this->ql = ql;
     this->qr = qr;
     this->v = v;
-    update(0, n, 1);
+    modify(0, n, 1);
   }
-  void update(int l, int r, int p) {
+  void modify(int l, int r, int p) {
     if (qr <= l or r <= ql)
       return;
     if (ql <= l and r <= qr)
@@ -50,8 +50,8 @@ struct LazySegmentTree {
 
     push(p);
     int mid = (l + r) / 2;
-    update(l, mid, p * 2);
-    update(mid, r, p * 2 + 1);
+    modify(l, mid, p * 2);
+    modify(mid, r, p * 2 + 1);
     pull(p);
   }
 
@@ -62,7 +62,7 @@ struct LazySegmentTree {
   }
   Info query(int l, int r, int p) {
     if (qr <= l or r <= ql)
-      return Info{};
+      return Info();
     if (ql <= l and r <= qr)
       return seg[p];
 
