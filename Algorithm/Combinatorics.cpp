@@ -1,9 +1,8 @@
-template <class T>
 struct Comb {
   int n;
-  const T mod;
-  vector<T> fac, inv_fac;
-  Comb(int n, T mod) : n(n), mod(mod) {
+  const ll mod;
+  vector<ll> fac, inv_fac;
+  Comb(int n, ll mod) : n(n), mod(mod) {
     fac.resize(n + 1, 1);
     inv_fac.resize(n + 1);
     for (int i = 1; i <= n; i++) {
@@ -16,8 +15,8 @@ struct Comb {
     }
   }
 
-  T pow(T base, T exp) {
-    T res = 1;
+  ll pow(ll base, ll exp) {
+    ll res = 1;
     while (exp) {
       if (exp & 1) {
         res = res * base % mod;
@@ -28,13 +27,15 @@ struct Comb {
     return res;
   }
 
-  T A(int n, int m) { return fac[n] * inv_fac[n - m] % mod; }
+  ll A(int n, int m) { return fac[n] * inv_fac[n - m] % mod; }
 
-  T C(int n, int m) { return fac[n] * inv_fac[n - m] % mod * inv_fac[m] % mod; }
+  ll C(int n, int m) {
+    return fac[n] * inv_fac[n - m] % mod * inv_fac[m] % mod;
+  }
 
-  T C(int n) { return C(n * 2, n) - C(n * 2, n + 1); }
+  ll C(int n) { return C(n * 2, n) - C(n * 2, n + 1); }
 
-  T s(int n, int m) {
+  ll s(int n, int m) {
     vector res(m + 1, 0);
     res[0] = 1;
     for (int i = 1; i <= n; i++) {
@@ -46,12 +47,12 @@ struct Comb {
     return res[m];
   }
 
-  T S(int n, int m) {
-    T res = 0;
+  ll S(int n, int m) {
+    ll res = 0;
     int sign = -1;
     for (int i = 0; i <= m; i++) {
       sign *= -1;
-      T term = sign * C(m, i) * pow(m - i, n) % mod;
+      ll term = sign * C(m, i) * pow(m - i, n) % mod;
       res = (res + term + mod) % mod;
     }
     return res * inv_fac[m] % mod;

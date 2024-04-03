@@ -20,7 +20,7 @@ struct BIT {
 
   T query(int x) {
     T res = 0;
-    for (int i = x; i; i -= lowbit(i)) {
+    for (int i = x; i > 0; i -= lowbit(i)) {
       res = res + bit[i];
     }
     return res;
@@ -30,7 +30,7 @@ struct BIT {
   int select(const T& k) {
     int x = 0;
     T cur;
-    for (int i = 1 << __lg(n); i; i >>= 1) {
+    for (int i = 1 << __lg(n); i > 0; i >>= 1) {
       if (x + i <= n && cur + bit[x + i] <= k) {
         x += i;
         cur = cur + bit[x];

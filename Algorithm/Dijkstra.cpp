@@ -11,7 +11,7 @@ struct Dijkstra {
     adj.assign(n, vector(0, {}));
   }
 
-  void add_edge(int u, int v, T w) { adj[u].push_back({w, v}); }
+  void addEdge(int u, int v, T w) { adj[u].push_back({w, v}); }
 
   void run(int s) {
     priority_queue<pti, vector<pti>, greater<pti>> q;
