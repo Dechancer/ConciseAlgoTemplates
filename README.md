@@ -15,6 +15,7 @@ In the naming of variables, functions and classes, I have tried to follow the co
 ## Notes
 
 Please note that since this project has only just begun, I have not yet explained in detail what each function does. But it should be self-explanatory.
+And the cpp standard is at least c++17.
 
 Special thanks to Jiangly from Beijing University for his code implementation help.
 
