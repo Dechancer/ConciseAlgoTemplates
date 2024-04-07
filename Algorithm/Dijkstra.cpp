@@ -1,26 +1,26 @@
-template <class T>
 struct Dijkstra {
-  using pti = pair<T, int>;
-  vector<T> dist;
-  vector<vector<pti>> adj;
+  using pli = pair<ll, int>;
+  const ll inf;
+  vector<ll> dist;
+  vector<vector<pli>> adj;
 
-  Dijkstra(int n) { init(n); }
+  Dijkstra(int n, ll inf) : inf(inf) { init(n); }
 
   void init(int n) {
-    dist.assign(n, -1);
+    dist.assign(n, inf);
     adj.assign(n, vector(0, {}));
   }
 
-  void addEdge(int u, int v, T w) { adj[u].push_back({w, v}); }
+  void addEdge(int u, int v, ll w) { adj[u].push_back({w, v}); }
 
   void run(int s) {
-    priority_queue<pti, vector<pti>, greater<pti>> q;
+    priority_queue<pli, vector<pli>, greater<pli>> q;
     q.push({0, s});
     while (q.size()) {
       auto [d, u] = q.top();
       q.pop();
 
-      if (dist[u] != -1) {
+      if (dist[u] != inf) {
         continue;
       }
       dist[u] = d;
