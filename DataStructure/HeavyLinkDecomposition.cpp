@@ -1,5 +1,5 @@
 struct HLD {
-  int id;
+  int idx;
   vector<int> fa, sz, dep, top, dfn;
   vector<vector<int>> adj;
 
@@ -33,7 +33,7 @@ struct HLD {
   }
 
   void dfs1(int u) {
-    dfn[u] = id++;
+    dfn[u] = idx++;
     for (auto& v : adj[u]) {
       top[v] = v == adj[u][0] ? top[u] : v;
       dfs1(v);
@@ -41,7 +41,7 @@ struct HLD {
   }
 
   void run(int root) {
-    id = 0;
+    idx = 0;
     top[root] = root;
     dep[root] = 0;
     fa[root] = -1;
@@ -58,4 +58,6 @@ struct HLD {
     }
     return dep[u] < dep[v] ? u : v;
   }
+
+  int dist(int u, int v) { return dep[u] + dep[v] - dep[lca(u, v)] * 2; }
 };

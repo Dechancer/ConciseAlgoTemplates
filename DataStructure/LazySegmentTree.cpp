@@ -3,9 +3,11 @@ struct LazySegmentTree {
   int n;
   int ql, qr;
   Tag v;
-  vector<Info> seg;
   vector<Tag> tag;
+  vector<Info> seg;
+  function<bool(Info)> pred;
 
+  LazySegmentTree() {}
   LazySegmentTree(int n, Info v = Info()) { init(vector(n, v)); }
   LazySegmentTree(const vector<Info>& a) { init(a); }
 
@@ -69,6 +71,26 @@ struct LazySegmentTree {
     int mid = (l + r) / 2;
     push(p);
     return query(l, mid, p * 2) + query(mid, r, p * 2 + 1);
+  }
+
+  int lowerBound(int ql, int qr, auto pred) {
+    this->ql = ql;
+    this->qr = qr;
+    this->pred = pred;
+    return lowerBound(0, n, 1);
+  }
+  int lowerBound(int l, int r, int p) {
+    if (qr <= l or r <= ql or !pred(seg[p]))
+      return -1;
+    if (l + 1 == r)
+      return l;
+
+    int mid = (l + r) / 2;
+    int res = lowerBound(l, mid, p * 2);
+    if (res == -1) {
+      res = lowerBound(mid, r, p * 2 + 1);
+    }
+    return res;
   }
 };
 
