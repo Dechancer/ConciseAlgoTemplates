@@ -7,6 +7,7 @@ struct HLD : LazySegmentTree<Info, Tag> {
   HLD(int n) { init(n); }
 
   void init(int n) {
+    idx = 0;
     fa.resize(n);
     sz.resize(n);
     dep.resize(n);
@@ -49,7 +50,6 @@ struct HLD : LazySegmentTree<Info, Tag> {
   }
 
   void run(int root) {
-    idx = 0;
     top[root] = root;
     dep[root] = 0;
     fa[root] = -1;
