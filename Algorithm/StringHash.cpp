@@ -1,31 +1,30 @@
-struct StringHash : vector<ll> {
-  const int base;
-  const int mod;
-  vector<ll> pw;
+struct StringHash : vector<int> {
+  const ll base;
+  const ll mod;
+  vector<int> pw;
   StringHash& hash = *this;
 
   StringHash() : base(findPrime(1e4)), mod(findPrime(1e9)) {}
   StringHash(const string& s) : StringHash() { init(s); }
 
-  ll findPrime(int mag) {
-    auto isPrime = [](ll num) {
+  int findPrime(int mag) {
+    auto isPrime = [](int num) {
       for (ll i = 2; i * i <= num; i++) {
-        if (num % i == 0) {
+        if (num % i == 0)
           return false;
-        }
       }
       return true;
     };
 
-    mt19937 rng(time(0));
-    ll prime = rng() % mag + mag;
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    int prime = rng() % mag + mag;
     while (isPrime(prime) == false) {
       prime++;
     }
     return prime;
   }
 
-  vector<ll>& init(const string& s) {
+  vector<int>& init(const string& s) {
     int n = s.size();
     pw.resize(n + 1, 1);
     for (int i = 0; i < n; i++) {
@@ -38,5 +37,7 @@ struct StringHash : vector<ll> {
     return hash;
   }
 
-  ll get(int l, int r) { return (hash[r] + (mod - hash[l]) * pw[r - l]) % mod; }
+  int get(int l, int r) {
+    return (hash[r] + (mod - hash[l]) * pw[r - l]) % mod;
+  }
 };

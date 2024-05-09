@@ -1,33 +1,35 @@
 struct MP {
-  string s;
-  vector<int> pi;
+  string pat;
+  vector<int> pi, match;
 
+  MP() {}
   MP(const string& s) { init(s); }
 
-  void init(const string& s) {
-    this->s = s;
-    pi.resize(s.size());
-    for (int i = 1, j = 0; i < s.size(); i++) {
-      while (j and s[i] != s[j]) {
+  vector<int>& init(const string& s) {
+    pat = s;
+    pi.resize(pat.size());
+    for (int i = 1, j = 0; i < pat.size(); i++) {
+      while (j and pat[i] != pat[j]) {
         j = pi[j - 1];
       }
-      j += s[i] == s[j];
+      j += pat[i] == pat[j];
       pi[i] = j;
     }
+    return pi;
   }
 
-  void match(string& t) {
+  auto& run(const string& s) {
+    match.resize(s.size());
     for (int i = 0, j = 0; i < s.size(); i++) {
-      while (j and s[i] != t[j]) {
+      while (j and s[i] != pat[j]) {
         j = pi[j - 1];
       }
-      j += s[i] == t[j];
-      if (j == t.size()) {
-        foundIt(i, j);
+      j += s[i] == pat[j];
+      match[i] = j;
+      if (j == pat.size()) {
         j = pi[j - 1];
       }
     }
+    return match;
   }
-
-  void foundIt(int i, int len) {}
 };

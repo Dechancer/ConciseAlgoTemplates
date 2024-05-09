@@ -1,21 +1,19 @@
 struct Dijkstra {
-  using pli = pair<ll, int>;
   const ll inf;
   vector<ll> dist;
-  vector<vector<pli>> adj;
+  vector<vector<pair<int, ll>>> adj;
 
   Dijkstra(int n, ll inf) : inf(inf) { init(n); }
 
   void init(int n) {
     dist.assign(n, inf);
-    adj.assign(n, vector(0, {}));
+    adj.assign(n, {});
   }
 
-  void addEdge(int u, int v, ll w) { adj[u].push_back({w, v}); }
+  void addEdge(int u, int v, ll w) { adj[u].push_back({v, w}); }
 
   void run(int s) {
-    priority_queue<pli, vector<pli>, greater<pli>> q;
-    q.push({0, s});
+    priority_queue q{greater<pair<ll, int>>(), vector{pair(0ll, s)}};
     while (q.size()) {
       auto [d, u] = q.top();
       q.pop();
@@ -25,7 +23,7 @@ struct Dijkstra {
       }
       dist[u] = d;
 
-      for (auto& [w, v] : adj[u]) {
+      for (auto& [v, w] : adj[u]) {
         q.push({d + w, v});
       }
     }
