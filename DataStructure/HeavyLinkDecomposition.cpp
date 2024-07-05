@@ -1,20 +1,27 @@
 struct HLD {
-  int idx;
-  vector<int> fa, sz, dep, top, dfn;
+  int cur;
+  vector<int> fa, sz, dep, top;
+  vector<int> dfn, seq;
   vector<vector<int>> adj;
 
+  HLD() {}
   HLD(int n) { init(n); }
 
   void init(int n) {
+    cur = 0;
     fa.resize(n);
     sz.resize(n);
     dep.resize(n);
     top.resize(n);
     dfn.resize(n);
+    seq.resize(n);
     adj.assign(n, {});
   }
 
-  void addEdge(int u, int v) { adj[u].push_back(v); }
+  void addEdge(int u, int v) {
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+  }
 
   void dfs0(int u) {
     if (fa[u] != -1) {
@@ -33,15 +40,15 @@ struct HLD {
   }
 
   void dfs1(int u) {
-    dfn[u] = idx++;
+    dfn[u] = cur++;
+    seq[dfn[u]] = u;
     for (auto& v : adj[u]) {
       top[v] = v == adj[u][0] ? top[u] : v;
       dfs1(v);
     }
   }
 
-  void run(int root) {
-    idx = 0;
+  void run(int root = 0) {
     top[root] = root;
     dep[root] = 0;
     fa[root] = -1;
@@ -60,4 +67,16 @@ struct HLD {
   }
 
   int dist(int u, int v) { return dep[u] + dep[v] - dep[lca(u, v)] * 2; }
+
+  int jump(int u, int k) {
+    if (dep[u] < k) {
+      return -1;
+    }
+
+    int d = dep[u] - k;
+    while (dep[top[u]] > d) {
+      u = fa[top[u]];
+    }
+    return seq[dfn[u] - dep[u] + d];
+  }
 };

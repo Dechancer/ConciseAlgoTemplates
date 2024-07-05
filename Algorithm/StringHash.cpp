@@ -1,8 +1,8 @@
-struct StringHash : vector<int> {
+struct StringHash {
   const ll base;
   const ll mod;
   vector<int> pw;
-  StringHash& hash = *this;
+  vector<int> hash;
 
   StringHash() : base(findPrime(1e4)), mod(findPrime(1e9)) {}
   StringHash(const string& s) : StringHash() { init(s); }

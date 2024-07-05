@@ -23,9 +23,8 @@ struct BF {
   void run(int s) {
     dist[s] = 0;
     for (int i = 0; i < dist.size(); i++) {
-      if (!relax()) {
+      if (!relax())
         break;
-      }
     }
   }
 };
