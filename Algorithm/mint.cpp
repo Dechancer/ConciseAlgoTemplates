@@ -1,35 +1,36 @@
 template <int mod>
 struct mint {
-  ll x;
+  int x = 0;
   mint() {}
   mint(ll x) : x(norm(x % mod)) {}
 
-  ll norm(ll x) {
+  int norm(int x) {
     x += x < 0 ? mod : 0;
     x -= x >= mod ? mod : 0;
     return x;
   }
-  friend mint operator+(mint lhs, mint rhs) { return lhs.x + rhs.x; }
-  friend mint operator-(mint lhs, mint rhs) { return lhs.x - rhs.x; }
-  friend mint operator*(mint lhs, mint rhs) { return lhs.x * rhs.x; }
-  friend mint operator/(mint lhs, mint rhs) { return lhs * (rhs ^ (mod - 2)); }
-  friend mint operator^(mint lhs, ll exp) {
-    mint res = 1;
-    for (mint base = lhs; exp > 0; base *= base, exp >>= 1) {
+  mint& operator+=(mint rhs) { return x = norm(x + rhs.x), *this; }
+  mint& operator-=(mint rhs) { return x = norm(x - rhs.x), *this; }
+  mint& operator*=(mint rhs) { return x = 1ll * x * rhs.x % mod, *this; }
+  mint& operator/=(mint base) { return *this *= base ^= mod - 2; }
+  mint& operator^=(ll exp) {
+    mint res(1);
+    for (mint& base = *this; exp > 0; base *= base, exp /= 2) {
       if (exp & 1)
         res *= base;
     }
-    return res;
+    return *this = res;
   }
-  mint& operator+=(mint rhs) { return *this = *this + rhs; }
-  mint& operator-=(mint rhs) { return *this = *this - rhs; }
-  mint& operator*=(mint rhs) { return *this = *this * rhs; }
-  mint& operator/=(mint rhs) { return *this = *this / rhs; }
-  mint& operator^=(ll exp) { return *this = *this ^ exp; }
+  friend mint operator+(mint lhs, mint rhs) { return lhs += rhs; }
+  friend mint operator-(mint lhs, mint rhs) { return lhs -= rhs; }
+  friend mint operator*(mint lhs, mint rhs) { return lhs *= rhs; }
+  friend mint operator/(mint lhs, mint rhs) { return lhs /= rhs; }
+  friend mint operator^(mint lhs, ll exp) { return lhs ^= exp; }
   friend ostream& operator<<(ostream& os, mint rhs) { return os << rhs.x; }
   friend istream& operator>>(istream& is, mint& rhs) {
-    is >> rhs.x;
-    rhs = mint(rhs.x);
+    ll x;
+    cin >> x;
+    rhs = mint(x);
     return is;
   }
 };

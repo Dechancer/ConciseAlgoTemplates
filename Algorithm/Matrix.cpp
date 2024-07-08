@@ -1,34 +1,35 @@
 template <class T, int ord>
-struct Matrix : vector<vector<T>> {
-  Matrix() { init(vector(ord, vector(ord, T{}))); }
-  Matrix(vector<vector<T>> a) { init(a); }
-  void init(vector<vector<T>> a) { this->assign(a.begin(), a.end()); }
+struct Matrix : array<array<T, ord>, ord> {
+  Matrix() { init({}); }
+  Matrix(array<array<T, ord>, ord> a) { init(a); }
 
-  Matrix operator*(const Matrix& a) {
+  void init(array<array<T, ord>, ord> a) { swap(*this, a); }
+  void norm() {
+    for (int i = 0; i < ord; i++) {
+      (*this)[i][i] = 1;
+    }
+  }
+
+  Matrix& operator*=(const Matrix& rhs) {
     Matrix res;
     for (int i = 0; i < ord; i++) {
       for (int k = 0; k < ord; k++) {
         for (int j = 0; j < ord; j++) {
-          res[i][j] = (res[i][j] + 1ll * (*this)[i][k] * a[k][j]) % mod;
+          res[i][j] = res[i][j] + (*this)[i][k] * rhs[k][j];
         }
       }
     }
-    return res;
+    return *this = res;
   }
-
-  Matrix operator^(ll exp) {
-    Matrix base = *this;
+  Matrix& operator^=(ll exp) {
     Matrix res;
-    for (int i = 0; i < ord; i++) {
-      res[i][i] = 1;
+    res.norm();
+    for (auto& base = *this; exp > 0; base *= base, exp >>= 1) {
+      if (exp & 1)
+        res *= base;
     }
-    while (exp) {
-      if (exp & 1) {
-        res = res * base;
-      }
-      base = base * base;
-      exp >>= 1;
-    }
-    return res;
+    return *this = res;
   }
+  friend Matrix operator*(Matrix lhs, const Matrix& rhs) { return lhs *= rhs; }
+  friend Matrix operator^(Matrix lhs, ll exp) { return lhs ^= exp; }
 };
