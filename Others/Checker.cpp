@@ -1,4 +1,4 @@
-// Windows/Cmd
+// Windows/CMD
 struct Checker {
   Checker() {
     system("mkdir exe > nul");
