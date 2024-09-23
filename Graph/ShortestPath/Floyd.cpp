@@ -1,16 +1,17 @@
+template <class T>
 struct Floyd {
   int n;
-  const ll inf;
-  vector<vector<ll>> adj;
+  const T inf = numeric_limits<T>::max() / 2;
+  vector<vector<T>> adj;
 
-  Floyd(int n, ll inf) : inf(inf) { init(n); }
+  Floyd(int n) { init(n); }
 
   void init(int n) {
     this->n = n;
     adj.assign(n, vector(n, inf));
   }
 
-  void addEdge(int u, int v, ll w) { adj[u][v] = min(adj[u][v], w); }
+  void addEdge(int u, int v, T w) { adj[u][v] = min(adj[u][v], w); }
 
   void relax(int k) {
     for (int i = 0; i < n; i++) {

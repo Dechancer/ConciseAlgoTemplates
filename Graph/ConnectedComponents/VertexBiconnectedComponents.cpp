@@ -29,7 +29,7 @@ struct VBCC {
     stk.push_back(u);
 
     int son = 0;
-    for (auto v : adj[u]) {
+    for (auto& v : adj[u]) {
       if (dfn[v] == -1) {
         dfs(v, u);
         low[u] = min(low[u], low[v]);
@@ -54,17 +54,30 @@ struct VBCC {
 
     if (adj[u].empty()) {
       comp.push_back({u});
-      cnt++;
       stk.pop_back();
+      cnt++;
     }
   }
 
   auto& run() {
     for (int u = 0; u < n; u++) {
-      if (dfn[u] == -1) {
+      if (dfn[u] == -1)
         dfs(u, -1);
-      }
     }
     return comp;
+  }
+  struct Graph {
+    int n;
+    vector<pair<int, int>> edge;
+  };
+  Graph compress() {
+    Graph g;
+    g.n = n + cnt;
+    for (int v = 0; v < cnt; v++) {
+      for (int& u : comp[v]) {
+        g.edge.emplace_back(u, v + n);
+      }
+    }
+    return g;
   }
 };

@@ -1,13 +1,14 @@
+template <class T>
 struct BF {
-  const ll inf;
-  vector<ll> dist;
-  vector<tuple<int, int, ll>> edge;
+  const T inf = numeric_limits<T>::max() / 2;
+  vector<T> dist;
+  vector<tuple<int, int, T>> edge;
 
-  BF(int n, ll inf) : inf(inf) { init(n); }
+  BF(int n) { init(n); }
 
   void init(int n) { dist.assign(n, inf); }
 
-  void addEdge(int u, int v, ll w) { edge.push_back({u, v, w}); }
+  void addEdge(int u, int v, T w) { edge.push_back({u, v, w}); }
 
   bool relax() {
     bool ok = false;
@@ -20,11 +21,14 @@ struct BF {
     return ok;
   }
 
-  void run(int s) {
+  bool run(int s) {
+    bool ok = false;
     dist[s] = 0;
     for (int i = 0; i < dist.size(); i++) {
-      if (!relax())
+      ok |= relax() == false;
+      if (ok)
         break;
     }
+    return ok;
   }
 };

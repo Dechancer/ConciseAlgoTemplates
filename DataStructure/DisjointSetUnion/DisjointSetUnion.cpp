@@ -15,19 +15,17 @@ struct DSU {
     }
     return u;
   }
-
-  bool same(int u, int v) { return find(u) == find(v); }
-
   bool merge(int u, int v) {
     u = find(u);
     v = find(v);
     if (u == v) {
       return false;
     }
-    sz[u] += sz[v];
-    f[v] = u;
+    f[u] = v;
+    sz[v] += sz[u];
     return true;
   }
 
+  bool same(int u, int v) { return find(u) == find(v); }
   int size(int u) { return sz[find(u)]; }
 };

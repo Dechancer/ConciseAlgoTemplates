@@ -15,13 +15,13 @@ struct Matrix : array<array<T, ord>, ord> {
     for (int i = 0; i < ord; i++) {
       for (int k = 0; k < ord; k++) {
         for (int j = 0; j < ord; j++) {
-          res[i][j] = res[i][j] + (*this)[i][k] * rhs[k][j];
+          res[i][j] += (*this)[i][k] * rhs[k][j];
         }
       }
     }
     return *this = res;
   }
-  Matrix& operator^=(ll exp) {
+  Matrix& operator^=(auto exp) {
     Matrix res;
     res.norm();
     for (auto& base = *this; exp > 0; base *= base, exp >>= 1) {
@@ -31,5 +31,5 @@ struct Matrix : array<array<T, ord>, ord> {
     return *this = res;
   }
   friend Matrix operator*(Matrix lhs, const Matrix& rhs) { return lhs *= rhs; }
-  friend Matrix operator^(Matrix lhs, ll exp) { return lhs ^= exp; }
+  friend Matrix operator^(Matrix lhs, auto exp) { return lhs ^= exp; }
 };
