@@ -2,17 +2,19 @@ template <class T>
 struct Comb {
   int n;
   vector<T> fac, inv;
-  Comb(int n) : n(n) {
-    fac.resize(n + 1, 1);
-    inv.resize(n + 1);
-    for (int i = 1; i <= n; i++) {
-      fac[i] = fac[i - 1] * i;
-    }
+  Comb() : n(0), fac(1, T(1)), inv(1, T(1)) {}
+  Comb(int n) : Comb() { init(n); }
 
-    inv[n] = 1 / fac[n];
-    for (int i = n; i; i--) {
+  void init(int m) {
+    while (fac.size() <= m) {
+      fac.emplace_back(fac.back() * fac.size());
+    }
+    inv.resize(m + 1);
+    inv[m] = 1 / fac[m];
+    for (int i = m; i > n; i--) {
       inv[i - 1] = inv[i] * i;
     }
+    n = m;
   }
 
   T A(int n, int m) { return fac[n] * inv[n - m]; }
