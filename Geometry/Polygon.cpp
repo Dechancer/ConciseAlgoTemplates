@@ -191,10 +191,10 @@ struct Polygon {
       p = -p;
     }
 
-    auto mk = minkowski(a, b);
+    auto m = minkowski(a, b);
     T res = numeric_limits<T>::max();
-    for (int i = 0; i < mk.p.size(); i++) {
-      Line l(mk.p[i], mk.p[(i + 1) % mk.p.size()]);
+    for (int i = 0; i < m.p.size(); i++) {
+      Line l(m.p[i], m.p[(i + 1) % m.p.size()]);
       res = min(res, l.pointToSegment({}));
     }
     return res;
