@@ -28,8 +28,8 @@ struct Dijkstra {
       }
     }
   }
-  // h must be updated by starting with end point
-  T kth(int s, int t, int k, auto&& h) {
+  // h is a dist array starts from t.
+  T kth(int s, int t, int k, const vector<T>& h) {
     vector cnt(dist.size(), 0);
     priority_queue q{greater(), vector{tuple(T(), T(), s)}};
     while (q.size()) {
@@ -44,7 +44,8 @@ struct Dijkstra {
         return dist[t];
 
       for (auto& [v, w] : adj[u]) {
-        q.emplace(g + w + h[v], g + w, v);
+        if (cnt[v] != k)
+          q.emplace(g + w + h[v], g + w, v);
       }
     }
     return dist[t];
